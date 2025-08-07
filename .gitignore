@@ -1,23 +1,21 @@
-# Python virtual environments
+# Python environment
 .venv/
 venv/
 env/
 __pycache__/
 *.pyc
 
-# Node.js/Frontend
+# Node.js/React
 node_modules/
 dist/
 build/
 
-# OS/system files
+# System/editor/OS
 .DS_Store
 Thumbs.db
 
-# Environment & secrets
+# Secrets/uploads
 .env
 *.env
-
-# Upload & generated files
 uploads/
 *.log
