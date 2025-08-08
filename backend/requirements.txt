@@ -10,3 +10,5 @@ openai-whisper==20250625
 gunicorn==23.0.0
 python-docx==1.2.0
 fpdf==1.7.2
+transformers==4.44.2
+deep-translator==1.11.4

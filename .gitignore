@@ -1,21 +1,25 @@
-# Python environment
-.venv/
-venv/
-env/
-__pycache__/
+# Python environments (anywhere)
+**/.venv/
+**/venv/
+**/env/
+**/__pycache__/
 *.pyc
 
-# Node.js/React
-node_modules/
-dist/
-build/
+# Node.js/React artifacts (anywhere)
+**/node_modules/
+**/dist/
+**/build/
+
+# Uploads (anywhere)
+**/uploads/
 
 # System/editor/OS
 .DS_Store
 Thumbs.db
 
-# Secrets/uploads
+# Secrets
 .env
 *.env
-uploads/
+
+# Logs
 *.log

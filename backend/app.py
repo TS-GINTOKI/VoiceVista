@@ -348,6 +348,26 @@ def get_transcriptions(current_user_id):
         cur.close()
         conn.close()
 
+# --- Delete ALL Transcriptions for current user ---
+@app.route('/api/transcriptions', methods=['DELETE'])
+@token_required
+def delete_all_transcriptions(current_user_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("""
+            DELETE FROM audio_files
+            WHERE user_id = %s
+        """, (current_user_id,))
+        conn.commit()
+        return jsonify({'message': 'All transcriptions deleted successfully'})
+    except Exception as e:
+        conn.rollback()
+        return jsonify({'message': 'Failed to delete all transcriptions', 'error': str(e)}), 500
+    finally:
+        cur.close()
+        conn.close()
+
 # --- Get Single Transcription ---
 @app.route('/api/transcriptions/<int:transcription_id>', methods=['GET'])
 @token_required
@@ -373,6 +393,32 @@ def get_transcription(current_user_id, transcription_id):
             'transcript': transcription[4],
             'summary': transcription[5]
         })
+    finally:
+        cur.close()
+        conn.close()
+
+# --- Delete Single Transcription ---
+@app.route('/api/transcriptions/<int:transcription_id>', methods=['DELETE'])
+@token_required
+def delete_transcription(current_user_id, transcription_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    try:
+        # Ensure it belongs to the current user
+        cur.execute("""
+            DELETE FROM audio_files
+            WHERE id = %s AND user_id = %s
+            RETURNING id
+        """, (transcription_id, current_user_id))
+        deleted = cur.fetchone()
+        if not deleted:
+            conn.rollback()
+            return jsonify({'message': 'Transcription not found'}), 404
+        conn.commit()
+        return jsonify({'message': 'Transcription deleted successfully'})
+    except Exception as e:
+        conn.rollback()
+        return jsonify({'message': 'Failed to delete transcription', 'error': str(e)}), 500
     finally:
         cur.close()
         conn.close()
